@@ -356,3 +356,200 @@ body{
 .reminder-popup button:last-of-type{background:var(--peach);color:#fff}
 .reminder-popup button:last-of-type:hover{background:#ffb38e}
 .reminder-popup button:last-of-type:active{transform:scale(0.97)}
+
+/* todo dashboard */
+.todo-dashboard {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1.2rem;
+  margin-top: 1.2rem;
+}
+
+.todo-box {
+  flex: 1;
+  background: #ffffff;
+  border-radius: 14px;
+  padding: 1.2rem 0.8rem;
+  text-align: center;
+  border: 1px solid #e6e6e6;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.04);
+}
+
+.todo-box .num {
+  font-size: 1.8rem;
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+
+.todo-box p {
+  margin: 0;
+  font-size: 0.9rem;
+  color: #666;
+}
+
+.todo-filters {
+  display: flex;
+  gap: 1rem;
+  background: #f5f6f8;
+  padding: 0.5rem;
+  border-radius: 14px;
+  margin-bottom: 1.6rem;
+  border: 1px solid #e6e6e6;
+}
+
+/* Buttons inside the filter bar */
+.todo-filters button {
+  flex: 1;
+  background: #fff;
+  border: 1px solid #dcdcdc;
+  padding: 0.55rem 0.75rem;
+  font-weight: 600;
+  font-size: 0.85rem;
+  border-radius: 12px;
+  color: #333;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.15s ease-in-out;
+}
+
+.todo-filters button.active {
+  background: #e8eefc;
+  border: 1px solid #b4cafc;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+  color: #1f3fa3;
+}
+
+.todo-filters button span {
+  background: #d7d7d7;
+  padding: 2px 8px;
+  border-radius: 999px;
+  font-size: 0.7rem;
+  font-weight: 600;
+}
+
+.todo-filters button.active span {
+  background: #1f3fa3;
+  color: #fff;
+}
+
+/* To do list section card */
+.card.mt {
+  background: #fff;
+  border-radius: 16px;
+  padding: 1.2rem;
+  border: 1px solid #e6e6e6;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.04);
+}
+
+.card-header-with-date {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+  padding-bottom: 0.8rem;
+  border-bottom: 1px solid #eee;
+}
+
+.card-title {
+  font-weight: 700;
+  color: #333;
+  margin: 0;
+}
+
+.date-selector label {
+  font-weight: 600;
+  margin-right: 6px;
+  color: #444;
+}
+
+.date-input {
+  padding: 0.45rem 0.65rem;
+  border: 1px solid #dcdcdc;
+  border-radius: 8px;
+  font-size: 0.9rem;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 2.5rem 0;
+  color: #888;
+  font-size: 0.95rem;
+}
+
+/* Priority badges */
+.todo-content-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 6px;
+}
+
+.priority-pill {
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: capitalize;
+}
+
+.priority-pill.low {
+  background: #e8f5e9;
+  color: #2e7d32;
+}
+
+.priority-pill.medium {
+  background: #fff3e0;
+  color: #ef6c00;
+}
+
+.priority-pill.high {
+  background: #ffebee;
+  color: #c62828;
+}
+
+/* Edit and delete */
+.todo-actions,
+.event-header-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.todo-header-row,
+.event-header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.icon-btn-small {
+  width: 28px;
+  height: 28px;
+  border: none;
+  background: #fff;
+  border-radius: 8px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 15px;
+  transition: all 0.15s ease-in-out;
+  padding: 0;
+  border: 1px solid #dcdcdc;
+}
+
+.icon-btn-small:hover {
+  background: #f4f4f4;
+}
+
+.icon-btn-small.delete {
+  background: #ffe6e6;
+  border-color: #ffb3b3;
+}
+
+.icon-btn-small.delete:hover {
+  background: #ffcccc;
+}

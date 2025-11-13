@@ -7,6 +7,8 @@ export default function AddEventModal({ onClose, onCreate, defaultDate, defaultK
   const [time, setTime] = useState('');
   const [description, setDescription] = useState('');
   const [kind, setKind] = useState(defaultKind);
+  // priority for the to-do list
+  const [priority, setPriority] = useState(`Medium`);
 
   useEffect(() => {
     if (defaultDate) setDate(defaultDate);
@@ -28,6 +30,7 @@ export default function AddEventModal({ onClose, onCreate, defaultDate, defaultK
       description
     };
     if (kind === 'todo') item.completed = false;
+    item.priority = priority;
     onCreate(item);
     onClose();
   };
@@ -109,6 +112,21 @@ export default function AddEventModal({ onClose, onCreate, defaultDate, defaultK
               rows={3}
             />
           </div>
+
+          {kind === 'todo' && (
+            <div className='form-group'>
+              <label>Priority</label>
+              <select
+                value={priority}
+                onChange={(e) => setPriority(e.target.value)}
+                className='form-input'
+              >
+                <option value="Low">Low</option>
+                <option value="Medium">Medium</option>
+                <option value="High">High</option>
+              </select>
+            </div>
+          )}
 
           <div className="modal-actions">
             <button type="button" onClick={onClose} className="btn-secondary">Cancel</button>

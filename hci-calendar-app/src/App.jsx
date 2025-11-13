@@ -2,6 +2,8 @@ import { useState, useEffect } from 'react';
 import Calendar from './components/Calendar';
 import EventList from './components/EventList';
 import AddEventModal from './components/AddEventModal';
+import TodoStats from './components/TodoStats';
+import TodoFilters from './components/TodoFilters';
 import { loadItems, saveItems } from './utils/storage';
 import './App.css';
 
@@ -33,6 +35,8 @@ export default function App() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   // keep track of which tab user is viewing
   const [tab, setTab] = useState(`calendar`);
+  const [todoFilter, setTodoFilter] = useState(`all`)
+  const [editingItem, setEditingItem] = useState(null)
 
   useEffect(() => {
     saveItems(items);
@@ -116,7 +120,10 @@ export default function App() {
         <button
           className="btn-primary"
           type="button"
-          onClick={() => setIsModalOpen(true)}
+          onClick={() => {
+            setIsModalOpen(true)
+            setEditingItem(null)
+          }}
         >
           {createButtonLabel}
         </button>
@@ -167,34 +174,76 @@ export default function App() {
               Events for {formatDateLong(selectedDate) ?? 'selected date'}
             </h2>
             <div className="card-body">
-              <EventList events={items} selectedDate={selectedDate} onToggleTodo={handleToggleTodo} />
+              <EventList 
+                events={items} 
+                selectedDate={selectedDate} 
+                onToggleTodo={handleToggleTodo}
+                onDelete={(id) => setItems(prev => prev.filter(i => i.id !== id))}
+                setEditingItem={setEditingItem} 
+                setIsModalOpen={setIsModalOpen}
+              />
             </div>
           </section>
         </main>
       )}
 
       {/*To-do list tab with date selector*/}
-      {tab === `todo` && (
-        <section className="card mt">
-          <div className="card-header-with-date">
-            <h2 className="card-title">To-Do List</h2>
-            <div className="date-selector">
-              <label htmlFor="todo-date">Date:</label>
-              <input 
-                id="todo-date"
-                type="date" 
-                value={selectedDate} 
-                onChange={(e) => setSelectedDate(e.target.value)}
-                className="date-input"
-              />
-            </div>
-          </div>
-          <div className="card-body">
-            <p className="date-display">Items for {formatDateLong(selectedDate)}</p>
-            <EventList events={items.filter(i => i.kind === 'todo')} selectedDate={selectedDate} onToggleTodo={handleToggleTodo} />
-          </div>
-        </section>
-      )}
+      {tab === 'todo' && (() => {
+
+  const todos = items.filter(i => 
+  i.kind === 'todo' && i.date === selectedDate
+);
+
+  // filtered output
+  const filteredTodos = (() => {
+    if (todoFilter === 'pending') return todos.filter(i => !i.completed);
+    if (todoFilter === 'completed') return todos.filter(i => i.completed);
+    if (todoFilter === 'high') return todos.filter(i => i.priority === 'High');
+    return todos;
+  })();
+
+  return (
+    <section className="card mt">
+
+      {/* Stats */}
+      <TodoStats todos={todos} />
+
+      {/* Filter buttons */}
+      <TodoFilters
+        todos={todos}
+        todoFilter={todoFilter}
+        setTodoFilter={setTodoFilter}
+      />
+
+      {/* Date selector */}
+      <div className="card-header-with-date">
+        <h2 className="card-title">To-Do List</h2>
+        <div className="date-selector">
+          <label htmlFor="todo-date">Date:</label>
+          <input 
+            id="todo-date"
+            type="date"
+            value={selectedDate}
+            onChange={(e) => setSelectedDate(e.target.value)}
+            className="date-input"
+          />
+        </div>
+      </div>
+
+      {/* To-do list */}
+      <div className="card-body">
+        <EventList
+          events={filteredTodos}
+          selectedDate={selectedDate}
+          onToggleTodo={handleToggleTodo}
+          onDelete={(id) => setItems(prev => prev.filter(i => i.id !== id))}
+          setEditingItem={setEditingItem} 
+          setIsModalOpen={setIsModalOpen}
+        />
+      </div>
+    </section>
+  );
+})()}
 
       {tab === `reminders` && (
         <section className="card mt">
@@ -213,18 +262,39 @@ export default function App() {
           </div>
           <div className="card-body">
             <p className="date-display">Items for {formatDateLong(selectedDate)}</p>
-            <EventList events={items.filter(i => i.kind === 'reminder')} selectedDate={selectedDate} onToggleTodo={handleToggleTodo} />
+            <EventList 
+              events={items.filter(i => i.kind === 'reminder')} 
+              selectedDate={selectedDate} 
+              onToggleTodo={handleToggleTodo}
+              onDelete={(id) => setItems(prev => prev.filter(i => i.id !== id))}
+              setEditingItem={setEditingItem} 
+              setIsModalOpen={setIsModalOpen} 
+            />
           </div>
         </section>
       )}
 
     {isModalOpen && (
       <AddEventModal
-        onClose={() => setIsModalOpen(false)}
+        onClose={() => {
+          setEditingItem(null);            
+          setIsModalOpen(false);
+        }}
+        existingItem={editingItem}         
         onCreate={handleAddEvent}
+        onUpdate={(updated) => {           
+          setItems(prev => prev.map(item =>
+            item.id === updated.id ? updated : item
+          ));
+        }}
         defaultDate={selectedDate}
-        defaultKind={tab === 'calendar' ? 'event' : tab === 'todo' ? 'todo' : 'reminder'}
-      />
+        defaultKind={
+          editingItem 
+            ? editingItem.kind 
+            : (tab === 'calendar' ? 'event' : tab === 'todo' ? 'todo' : 'reminder')
+        }                   
+/>
+
     )}        {/* Reminder popup */}
         {currentReminder && (
           <div className="reminder-popup">
