@@ -1,6 +1,18 @@
 export default function EventList({ events, selectedDate, onToggleTodo, onDelete, setEditingItem, setIsModalOpen }) { 
   const filtered = (events || []).filter(e => e.date === selectedDate);
 
+function formatTime12Hour(timeString) {
+  if (!timeString) return '';
+  const [hourStr, minuteStr] = timeString.split(':');
+  let hour = parseInt(hourStr, 10);
+  const minutes = minuteStr.padStart(2, '0');
+
+  const ampm = hour >= 12 ? 'PM' : 'AM';
+  hour = hour % 12 || 12;
+
+  return `${hour}:${minutes} ${ampm}`;
+}
+
   if (!filtered || filtered.length === 0) {
     return <div className="empty-state">No items for this date</div>;
   }
@@ -56,7 +68,7 @@ export default function EventList({ events, selectedDate, onToggleTodo, onDelete
 
                 </div>
 
-                {item.time && <p className="event-time">🕒 {item.time}</p>}
+                {item.time && <p className="event-time">🕒 {formatTime12Hour(item.time)}</p>}
                 {item.description && <p className="event-desc">{item.description}</p>}
               </div>
             </div>
@@ -88,7 +100,7 @@ export default function EventList({ events, selectedDate, onToggleTodo, onDelete
                 </div>
               </div>
 
-              {item.time && <p className="event-time">🕒 {item.time}</p>}
+              {item.time && <p className="event-time">🕒 {formatTime12Hour(item.time)}</p>}
               {item.description && <p className="event-desc">{item.description}</p>}
               {item.kind === 'reminder' && (
                 <p className="reminder-note">🔔 Will notify at scheduled time</p>

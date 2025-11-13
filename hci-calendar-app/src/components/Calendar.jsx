@@ -16,6 +16,18 @@ function formatISO(d) {
   return `${y}-${m}-${day}`;
 }
 
+function formatTime12Hour(timeString) {
+  if (!timeString) return '';
+  const [hourStr, minuteStr] = timeString.split(':');
+  let hour = parseInt(hourStr, 10);
+  const minutes = minuteStr.padStart(2, '0');
+
+  const ampm = hour >= 12 ? 'PM' : 'AM';
+  hour = hour % 12 || 12; // Convert 0 → 12, 13 → 1, etc.
+
+  return `${hour}:${minutes} ${ampm}`;
+}
+
 export default function Calendar({ selectedDate, onSelectDate, items = [] }) {
   const [view, setView] = useState('month'); // month | week | day
   const cur = useMemo(() => {
@@ -141,7 +153,7 @@ export default function Calendar({ selectedDate, onSelectDate, items = [] }) {
                     {(eventsByDate[iso] || []).length > 0 ? (
                       (eventsByDate[iso] || []).map(ev => (
                         <div key={ev.id} className={`week-pill ${ev.kind}`}>
-                          <span className="week-pill-time">{ev.time || '—'}</span>
+                          <span className="week-pill-time">{ev.time ? formatTime12Hour(ev.time) : '—'}</span>
                           <span className="week-pill-title">{ev.title}</span>
                         </div>
                       ))
@@ -166,12 +178,12 @@ export default function Calendar({ selectedDate, onSelectDate, items = [] }) {
               const events = (eventsByDate[iso] || []).filter(ev => ev.time && ev.time.startsWith(String(h).padStart(2,'0')));
               return (
                 <div key={h} className="time-row">
-                  <div className="time-label">{hour}</div>
+                  <div className="time-label">{formatTime12Hour(hour)}</div>
                   <div className="time-slot">
                     {events.length > 0 ? (
                       events.map(ev => (
                         <div key={ev.id} className={`time-pill ${ev.kind}`}>
-                          <span className="time-pill-time">{ev.time}</span>
+                          <span className="time-pill-time">{formatTime12Hour(ev.time)}</span>
                           <span className="time-pill-title">{ev.title}</span>
                         </div>
                       ))
