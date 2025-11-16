@@ -23,6 +23,14 @@ A simple, friendly calendar and productivity app for students. More powerful tha
 ## Getting Started
 
 ```bash
+# Ensure Node.Js is downloaded first
+
+# Setup a Vite project to make sure everything needed is downloaded
+npm create vite@latest
+
+# Ensure you select "React" framework as well after naming project when prompted
+# Ensure you select "JavaScript" for the variant when prompted
+
 # Install dependencies
 npm install
 
