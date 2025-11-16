@@ -23,6 +23,10 @@ A simple, friendly calendar and productivity app for students. More powerful tha
 ## Getting Started
 
 ```bash
+# Ensure you have Node.Js installed
+# Ensure you have selected the React Framework
+# Ensure you also have the base JavaScript version selected
+
 # Install dependencies
 npm install
 
